@@ -8,12 +8,14 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-responses = []
+# responses = []
 
 
 @app.get("/")
 def start():
     """Load home page with survey title and instructions"""
+
+    session["responses"] = []
 
     return render_template(
         'survey_start.html',
@@ -47,7 +49,10 @@ def save_answer():
     """Reads answer from form and stores answer in responses. Redirects to
         next question or completion form if no more questions available"""
 
+    responses = session["responses"]
     responses.append(request.form["answer"])
+    session["responses"] = responses
+
     # Move to next question
     question_index = int(request.form["question_index"]) + 1
 
