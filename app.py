@@ -33,4 +33,24 @@ def questions(question_index):
     """render question page"""
     question = survey.questions[question_index]
 
-    return render_template("question.html", question=question)
+    return render_template("question.html", question=question, 
+        question_index=question_index)
+
+
+@app.post("/answer")
+def save_answer():
+    """doc string"""
+    answer = request.form["answer"]
+    responses.append(answer)
+    question_index = int(request.form["question_index"]) + 1
+
+    if (question_index >= len(survey.questions)):
+        return redirect("/completed_survey")
+    else:
+        return redirect(f"/questions/{question_index}")
+
+
+@app.get("/completed_survey")
+def completed():
+    """doc string"""
+    return render_template("completion.html")
