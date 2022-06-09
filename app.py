@@ -37,6 +37,13 @@ def questions(question_index):
     """Show question page with form containing question and possible answers.
         Passes along current question index"""
 
+    responses = session["responses"]
+    if (question_index is not len(responses)):
+        question_index = len(responses)
+        flash("""You are trying to access an invalid question, 
+            please answer questions in order.""")
+        return redirect(f'/questions/{question_index}')
+      
     return render_template(
         "question.html",
         question=survey.questions[question_index],
