@@ -10,19 +10,19 @@ debug = DebugToolbarExtension(app)
 
 responses = []
 
+
 @app.get("/")
 def start():
-    """doc"""
-
-    title = survey.title
-    instructions = survey.instructions
+    """Load home page with survey title and instructions"""
 
     return render_template('survey_start.html',
-        title=title, instructions=instructions)
+                           title=survey.title,
+                           instructions=survey.instructions)
+
 
 @app.post("/begin")
 def begin():
-    """redirect to questions, passing in question number"""
+    """Redirect to question page, passing in starting question number"""
 
     question_number = 0
     return redirect(f"/questions/{question_number}")
@@ -30,18 +30,21 @@ def begin():
 
 @app.get("/questions/<int:question_index>")
 def questions(question_index):
-    """render question page"""
-    question = survey.questions[question_index]
+    """Show question page with form containing question and possible answers.
+        Passes along current question index"""
 
-    return render_template("question.html", question=question, 
-        question_index=question_index)
+    return render_template("question.html",
+                           question=survey.questions[question_index],
+                           question_index=question_index)
 
 
 @app.post("/answer")
 def save_answer():
-    """doc string"""
-    answer = request.form["answer"]
-    responses.append(answer)
+    """Reads answer from form and stores answer in responses. Redirects to
+        next question or completion form if no more questions available"""
+
+    responses.append(request.form["answer"])
+    # Move to next question
     question_index = int(request.form["question_index"]) + 1
 
     if (question_index >= len(survey.questions)):
@@ -52,5 +55,6 @@ def save_answer():
 
 @app.get("/completed_survey")
 def completed():
-    """doc string"""
+    """Show completion page once all questions have been answered"""
+
     return render_template("completion.html")
