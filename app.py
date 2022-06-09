@@ -8,8 +8,6 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-# responses = []
-
 
 @app.get("/")
 def start():
@@ -28,7 +26,8 @@ def start():
 def begin():
     """Redirect to question page, passing in starting question number"""
 
-    question_number = 0
+    responses = session["responses"]
+    question_number = len(responses)
     return redirect(f"/questions/{question_number}")
 
 
@@ -38,7 +37,7 @@ def questions(question_index):
         Passes along current question index"""
 
     responses = session["responses"]
-    if (question_index is not len(responses)):
+    if (question_index != len(responses)):
         question_index = len(responses)
         flash("""You are trying to access an invalid question, 
             please answer questions in order.""")

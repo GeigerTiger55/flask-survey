@@ -1,23 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
 
-  {% for msg in get_flashed_messages() %}
-    <p style="color: red">{{ msg }}</p>
-  {% endfor %}
+{% for msg in get_flashed_messages() %}
+  <p style="color: red">{{ msg }}</p>
+{% endfor %}
 
-  <h1>{{ question.question }}</h1>
+<h1>{{ question.question }}</h1>
 
-  <form action="/answer" method="POST">
-    <input type="hidden" name="question_index" value="{{ question_index }}">
+<form action="/answer" method="POST">
+  <input type="hidden" name="question_index" value="{{ question_index }}">
 
-    <p>
-      {% for choice in question.choices %}
+  <p>
+    {% for choice in question.choices %}
       <input type="radio" name="answer" value="{{ choice }}">
       <label for="{{ choice }}">{{ choice }}</label>
-      {% endfor %}
-    </p>
+    {% endfor %}
+  </p>
 
-    <button>Continue</button>
-  </form>
+  <button>Continue</button>
+</form>
 
 {% endblock %}
